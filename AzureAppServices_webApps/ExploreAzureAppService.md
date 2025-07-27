@@ -1,11 +1,3 @@
-## Learning objectives
-
-
-- Describe Azure App Service key components and value.
-- Explain how Azure App Service manages authentication and authorization.
-- Identify methods to control inbound and outbound traffic to your web app.
-- Deploy an app to App Service using Azure CLI commands.
-
 ## Azure App Service Overview
 
 Azure App Service is an HTTP-based service for hosting web applications, REST APIs, and mobile back ends. Applications run and scale with ease on both Windows and Linux-based environments across multiple programming languages and frameworks.
@@ -319,5 +311,3 @@ By default, App Service apps are accessible through the internet and can only re
 - Outbound addresses are shared among apps on same worker VM family
 - Cannot directly connect multitenant App Service to your network
 - Must use networking features to control traffic flow
-
-
