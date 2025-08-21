@@ -135,5 +135,56 @@ General settings are configured in **Configuration > General settings** section.
 - **Mutual Authentication**: TLS mutual auth restricts access through certificate validation
 - **Pricing Dependency**: Advanced features may require higher App Service plan tiers
 
+---
+
+### Configure Path Mappings
+
+#### Overview
+Path mappings are configured in **Configuration > Path mappings** section. Options vary based on OS type (Windows vs Linux/containerized).
+
+#### Windows Apps (Uncontainerized)
+
+**Handler Mappings:**
+- **Purpose**: Add custom script processors for specific file extensions
+- **Configuration**:
+  - **Extension**: File extension to handle (e.g., `*.php`, `handler.fcgi`)
+  - **Script Processor**: Absolute path to script processor
+  - **Arguments**: Optional command-line arguments
+- **Root Reference**: Use `D:\home\site\wwwroot` for app's root directory
+
+**Virtual Applications & Directories:**
+- **Default Root**: Path `/` maps to `D:\home\site\wwwroot`
+- **Custom Mapping**: Configure virtual directories with physical paths relative to website root
+- **Web Application**: Uncheck "Directory" checkbox to mark virtual directory as web application
+- **Use Cases**: Multiple applications in repository or different app root folder
+
+#### Linux & Containerized Apps
+
+**Custom Storage Mounting:**
+- **Purpose**: Add external storage to containerized apps (includes all Linux apps and custom containers)
+- **Configuration Options**:
+  - **Basic**: For standard storage accounts without service endpoints/private endpoints
+  - **Advanced**: For storage with service endpoints, private endpoints, or Azure Key Vault
+
+**Storage Configuration:**
+- **Name**: Display name for the mount
+- **Storage Account**: Target storage account with desired container
+- **Storage Types**:
+  - **Azure Blobs**: Read-only access only
+  - **Azure Files**: Full access (Windows containers support only Azure Files)
+- **Mount Path**: Absolute path in container for storage mounting
+- **Deployment Slots**: Option to apply settings to deployment slots
+
+**Advanced Settings:**
+- **Storage Container/Share Name**: Specific container or file share
+- **Access Key**: Authentication key for advanced configurations
+- **Slot Settings**: Can be configured to persist across deployment slots
+
+#### Key Notes
+- **OS-Specific**: Different configuration options for Windows vs Linux/containerized apps
+- **Storage Limitations**: Azure Blobs are read-only; Windows containers limited to Azure Files
+- **Path References**: Windows apps use `D:\home\site\wwwroot` as standard root reference
+- **Custom Handlers**: Enable processing of non-standard file types through custom script processors
+
 
 
