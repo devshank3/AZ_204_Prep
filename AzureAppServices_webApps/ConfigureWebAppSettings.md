@@ -1,4 +1,4 @@
-## Configuration of App settings, 
+## Configuration of App settings
 
 App settings are variables passed as environment variables to the application code
 
@@ -8,6 +8,8 @@ App settings are variables passed as environment variables to the application co
 - Options installing SSL/TLS certificate 
 - Diagnostic logging for monitoring and debugging 
 - Virtual app to directory mappings
+
+---
 
 ### Configure Application Settings
 
@@ -88,6 +90,50 @@ App settings are variables passed as environment variables to the application co
 - **.NET PostgreSQL**: Set connection string type to "Custom" as workaround for known issue
 - **Slot Settings**: Can be configured to stick to specific deployment slots
 - **Apply Changes**: Always select "Apply" to save changes in Environment variables page
+
+---
+
+### Configure General Settings
+
+#### Overview
+General settings are configured in **Configuration > General settings** section. Some settings require higher pricing tiers.
+
+#### Stack Settings
+- **Software Stack**: Configure programming language and SDK versions
+- **Linux/Container Apps**: Optional startup command or file configuration
+- **Platform Support**: Language-specific runtime environments
+
+#### Platform Settings
+
+**Basic Platform Configuration:**
+- **Platform Bitness**: 32-bit or 64-bit (Windows apps only)
+- **FTP State**: Allow FTPS only or disable FTP completely
+- **HTTP Version**: Set to 2.0 for HTTPS/2 protocol support
+- **Web Sockets**: Enable for ASP.NET SignalR or socket.io applications
+
+**Performance & Availability:**
+- **Always On**: Keeps app loaded without traffic (prevents 20-min unload timeout)
+  - Required for continuous WebJobs or CRON-triggered WebJobs
+  - Sends GET request to app root every 5 minutes
+  - Prevents high latency from cold starts
+- **ARR Affinity**: Routes clients to same instance for session persistence
+  - Set to "Off" for stateless applications
+
+**Security Settings:**
+- **HTTPS Only**: Redirects all HTTP traffic to HTTPS
+- **Minimum TLS Version**: Set minimum required TLS encryption version
+- **Incoming Client Certificates**: Enable mutual authentication with client certificates
+
+**Development Tools:**
+- **Remote Debugging**: Enable for ASP.NET, ASP.NET Core, or Node.js
+  - Automatically disables after 48 hours
+  - Available for development/testing scenarios
+
+#### Key Notes
+- **HTTP/2**: Requires HTTPS and custom DNS name for optimal browser support
+- **Always On**: Essential for production apps to avoid cold start delays
+- **Mutual Authentication**: TLS mutual auth restricts access through certificate validation
+- **Pricing Dependency**: Advanced features may require higher App Service plan tiers
 
 
 
