@@ -261,5 +261,79 @@ Built-in diagnostics assist with debugging App Service apps. Configure logging t
 - **Scaled Apps**: ZIP files contain logs for each instance
 - **Security**: Detailed error pages shouldn't be sent to production clients
 
+---
+
+### Configure Security Certificates
+
+#### Overview
+App Service provides tools to create, upload, or import certificates. Certificates are stored in deployment units bound to resource group and region combinations (webspace).
+
+#### Certificate Options
+
+| Option | Description | Use Case |
+|--------|-------------|----------|
+| **Free App Service Managed** | Private certificate, free, auto-renewed | Secure custom domains simply |
+| **Purchase App Service Certificate** | Azure-managed private certificate | Automated management with renewal/export flexibility |
+| **Import from Key Vault** | Use existing Key Vault certificates | Integration with Azure Key Vault management |
+| **Upload Private Certificate** | Third-party private certificates | Existing certificates from external providers |
+| **Upload Public Certificate** | Public certificates for code access | Access remote resources (not for domain security) |
+
+#### Private Certificate Requirements
+
+**General Requirements:**
+- **Format**: Password-protected PFX file, triple DES encrypted
+- **Key Length**: Minimum 2,048 bits private key
+- **Certificate Chain**: Include all intermediate and root certificates
+
+**TLS Binding Requirements:**
+- **Extended Key Usage**: Server authentication (OID = 1.3.6.1.5.5.7.3.1)
+- **Certificate Authority**: Signed by trusted CA
+
+#### Free Managed Certificate
+
+**Prerequisites:**
+- **App Service Plan**: Basic, Standard, Premium, or Isolated tier
+- **Domain Requirements**: Custom DNS name configured
+
+**Features:**
+- **Management**: Fully managed by App Service
+- **Renewal**: Automatic renewal every 6 months (45 days before expiration)
+- **Issuer**: DigiCert (may change, avoid certificate pinning)
+- **Cost**: Free of charge
+
+**Limitations:**
+- **No Wildcard**: Wildcard certificates not supported
+- **No Client Certificates**: Cannot use certificate thumbprint
+- **No Private DNS**: Private DNS not supported
+- **Not Exportable**: Cannot export certificate
+- **No ASE Support**: Not available in App Service Environment
+- **Character Limits**: Alphanumeric, dashes (-), periods (.) only
+- **Domain Length**: Maximum 64 characters
+
+**Important Notes:**
+- **CAA Records**: Some domains require CAA record: `0 issue digicert.com`
+- **Certificate Changes**: Root issuer may change without notice
+- **Avoid Pinning**: Don't hard-code dependencies on certificate hierarchy
+
+#### App Service Certificate (Purchased)
+
+**Azure-Managed Tasks:**
+- **Purchase Process**: Handles certificate provider interactions
+- **Domain Verification**: Automatic domain validation
+- **Key Vault Storage**: Maintains certificate in Azure Key Vault
+- **Renewal Management**: Automatic renewal handling
+- **Synchronization**: Auto-sync with imported copies in App Service apps
+
+**Management Capabilities:**
+- Import certificate into App Service
+- Renew, rekey, and export operations
+- Centralized certificate lifecycle management
+
+#### Key Notes
+- **Accessibility**: Certificates accessible to apps in same resource group and region
+- **National Clouds**: App Service Certificates not supported in Azure National Clouds
+- **Webspace Binding**: Certificates bound to specific resource group/region combinations
+- **Certificate Chain**: Ensure complete certificate chain for proper SSL/TLS functionality
+
 
 
