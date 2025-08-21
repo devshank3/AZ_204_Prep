@@ -186,5 +186,80 @@ Path mappings are configured in **Configuration > Path mappings** section. Optio
 - **Path References**: Windows apps use `D:\home\site\wwwroot` as standard root reference
 - **Custom Handlers**: Enable processing of non-standard file types through custom script processors
 
+---
+
+### Enable Diagnostic Logging
+
+#### Overview
+Built-in diagnostics assist with debugging App Service apps. Configure logging through **App Service logs** section.
+
+#### Logging Types & Platforms
+
+| Type | Platform | Location | Description |
+|------|----------|----------|-------------|
+| **Application Logging** | Windows, Linux | File system / Azure Storage blobs | Messages from application code with categories: Critical, Error, Warning, Info, Debug, Trace |
+| **Web Server Logging** | Windows | File system / Azure Storage blobs | Raw HTTP request data in W3C extended log format |
+| **Detailed Error Messages** | Windows | File system | HTML error pages for HTTP 400+ errors |
+| **Failed Request Tracing** | Windows | File system | Detailed IIS component tracing for failed requests |
+| **Deployment Logging** | Windows, Linux | File system | Automatic logging for deployment failures |
+
+#### Application Logging Configuration
+
+**Windows Apps:**
+- **Navigation**: App → App Service logs
+- **Options**: 
+  - **Filesystem**: Temporary debugging (12-hour auto-disable)
+  - **Blob Storage**: Long-term logging (requires storage container)
+- **Log Levels**:
+  - **Disabled**: None
+  - **Error**: Error, Critical
+  - **Warning**: Warning, Error, Critical
+  - **Information**: Info, Warning, Error, Critical
+  - **Verbose**: All categories (Trace, Debug, Info, Warning, Error, Critical)
+
+**Linux/Container Apps:**
+- **Option**: File System only
+- **Quota**: Disk quota in MB
+- **Retention**: Days to retain logs
+
+#### Web Server Logging
+- **Storage Options**: Blob storage or file system
+- **Retention Period**: Configurable retention days
+- **Platform**: Windows only
+
+#### Code Implementation
+- **ASP.NET**: Use `System.Diagnostics.Trace` class
+  ```csharp
+  System.Diagnostics.Trace.TraceError("Error message");
+  ```
+- **ASP.NET Core**: Uses `Microsoft.Extensions.Logging.AzureAppServices` provider
+- **Python**: Use OpenCensus package for application diagnostics
+
+#### Log Streaming
+**Prerequisites**: Enable desired log type first
+
+**Methods**:
+- **Azure Portal**: Navigate to app → Log stream
+- **Azure CLI**: 
+  ```bash
+  az webapp log tail --name appname --resource-group myResourceGroup
+  ```
+- **Local Console**: Install Azure CLI and sign in
+
+#### Accessing Log Files
+
+**Azure Storage Blobs**: Use Azure Storage client tools
+
+**File System Logs**: Download ZIP file via browser
+- **Windows Apps**: `https://<app-name>.scm.azurewebsites.net/api/dump`
+- **Linux/Container Apps**: `https://<app-name>.scm.azurewebsites.net/api/logs/docker/zip`
+
+#### Key Notes
+- **Storage Keys**: Regenerating storage keys requires resetting logging configuration
+- **Stream Buffering**: Some log types may show out-of-order events due to buffering
+- **File Location**: Logs stored in `/LogFiles` directory (`d:/home/logfiles`)
+- **Scaled Apps**: ZIP files contain logs for each instance
+- **Security**: Detailed error pages shouldn't be sent to production clients
+
 
 
